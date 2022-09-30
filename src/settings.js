@@ -35,7 +35,7 @@ export default {
   /**
    * 是否显示动态标题
    */
-  dynamicTitle: false,
+  dynamicTitle: true,
 
   /**
    * @type {string | array} 'production' | ['production', 'development']
@@ -44,4 +44,4 @@ export default {
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
   errorLog: 'production'
-}
+};
