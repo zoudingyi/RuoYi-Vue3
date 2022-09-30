@@ -1,6 +1,5 @@
 import auth from '@/plugins/auth';
 import router, { constantRoutes, dynamicRoutes } from '@/router';
-import { getRouters } from '@/api/menu';
 import Layout from '@/layout/index';
 import ParentView from '@/components/ParentView';
 import InnerLink from '@/layout/components/InnerLink';
@@ -30,7 +29,7 @@ const usePermissionStore = defineStore('permission', {
     setSidebarRouters(routes) {
       this.sidebarRouters = routes;
     },
-    generateRoutes(roles) {
+    generateRoutes() {
       return new Promise(resolve => {
         const asyncRoutes = filterDynamicRoutes(dynamicRoutes);
         asyncRoutes.forEach(route => {
