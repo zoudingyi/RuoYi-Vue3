@@ -1,5 +1,6 @@
-import { getToken, setToken, removeToken } from '@/utils/auth';
+import { getToken, removeToken } from '@/utils/auth';
 import defAva from '@/assets/images/profile.jpg';
+const isDev = import.meta.env.DEV;
 
 const useUserStore = defineStore('user', {
   state: () => ({
@@ -7,55 +8,57 @@ const useUserStore = defineStore('user', {
     name: '',
     avatar: '',
     roles: [],
-    permissions: []
+    permissions: [],
+    allRoles: [
+      {
+        id: 353,
+        label: 'admin'
+      },
+      {
+        id: 233,
+        label: 'edit'
+      }
+    ] // 与后端约定的所有角色列表
   }),
   actions: {
-    // 登录
+    // 登录 oauth2页面会自动存储cookie
     login() {
-      // oauth2页面会自动存储cookie
       location.href = `/oauth2/login?callback=${location.href}`;
-      // const username = userInfo.username.trim()
-      // const password = userInfo.password
-      // const code = userInfo.code
-      // const uuid = userInfo.uuid
-      // return new Promise((resolve, reject) => {
-      //   login(username, password, code, uuid).then(res => {
-      //     setToken(res.token)
-      //     this.token = res.token
-      //     resolve()
-      //   }).catch(error => {
-      //     reject(error)
-      //   })
-      // })
     },
     // 获取用户信息
     getInfo() {
-      return new Promise(resolve => {
-        const res = {
+      return new Promise(async resolve => {
+        let response = null;
+        if (!isDev) response = await getUserInfo();
+        const data = {
           user: {
-            admin: true,
-            userName: 'zdy',
-            avatar: ''
+            userName: response?.data.name ?? 'developer',
+            avatar: response?.data.avatar ?? defAva
           },
-          roles: ['admin', 'common'],
+          roles: isDev ? ['admin'] : this.rolesMatch(response),
           permissions: ['*:*:*']
         };
-        const { user } = res;
-        const avatar =
-          user.avatar == '' || user.avatar == null
-            ? defAva
-            : import.meta.env.VITE_APP_BASE_API + user.avatar;
 
-        if (res.roles && res.roles.length > 0) {
+        const { user, roles, permissions } = data;
+        if (roles && roles.length > 0) {
           // 验证返回的roles是否是一个非空数组
-          this.roles = res.roles;
-          this.permissions = res.permissions;
+          this.roles = roles;
+          this.permissions = permissions;
         } else {
-          this.roles = ['ROLE_DEFAULT'];
+          this.roles = ['common'];
         }
         this.name = user.userName;
-        this.avatar = avatar;
-        resolve(res);
+        this.avatar = user.avatar;
+        resolve(data);
+      });
+    },
+    // 判断用户有哪些角色
+    rolesMatch(response) {
+      return response.data.role_id_list.map(roleId => {
+        const index = this.allRoles.findIndex(item => item.id == roleId);
+        if (index != -1) {
+          return this.allRoles[index].label;
+        }
       });
     },
     // 退出系统

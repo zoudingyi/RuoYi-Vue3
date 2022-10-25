@@ -1,4 +1,8 @@
-import { createWebHistory, createRouter } from 'vue-router';
+import {
+  createWebHistory,
+  createWebHashHistory,
+  createRouter
+} from 'vue-router';
 /* Layout */
 import Layout from '@/layout';
 
@@ -70,14 +74,13 @@ export const constantRoutes = [
 // 动态路由，基于用户权限动态去加载
 export const dynamicRoutes = [
   {
-    path: '/intentions-classification',
+    path: '/demo-page',
     component: Layout,
-    hidden: false,
-    permissions: ['intentions:classification:list'],
+    roles: ['common'],
     children: [
       {
         path: 'index',
-        component: () => import('@/views/intentions-classification/index'),
+        component: () => import('@/views/demo-page/index'),
         name: 'Intentions',
         meta: {
           title: '意图分类表',
@@ -90,6 +93,7 @@ export const dynamicRoutes = [
 
 const router = createRouter({
   history: createWebHistory(),
+  // history: createWebHashHistory(), // hash router
   routes: constantRoutes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

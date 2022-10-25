@@ -1,5 +1,5 @@
 <template>
-  <div>hello</div>
+  <div class="app-container">hello</div>
 </template>
 
 <script>
