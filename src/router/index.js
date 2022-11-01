@@ -83,7 +83,7 @@ export const dynamicRoutes = [
         component: () => import('@/views/demo-page/index'),
         name: 'Intentions',
         meta: {
-          title: '意图分类表',
+          title: '菜单-1',
           icon: 'user'
         }
       }

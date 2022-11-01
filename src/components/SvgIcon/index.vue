@@ -5,6 +5,7 @@
 </template>
 
 <script>
+// https://github.com/vbenjs/vite-plugin-svg-icons/blob/main/README.zh_CN.md
 export default defineComponent({
   props: {
     iconClass: {
@@ -18,20 +19,20 @@ export default defineComponent({
     color: {
       type: String,
       default: ''
-    },
+    }
   },
   setup(props) {
     return {
       iconName: computed(() => `#icon-${props.iconClass}`),
       svgClass: computed(() => {
         if (props.className) {
-          return `svg-icon ${props.className}`
+          return `svg-icon ${props.className}`;
         }
-        return 'svg-icon'
+        return 'svg-icon';
       })
-    }
+    };
   }
-})
+});
 </script>
 
 <style scope lang="scss">
