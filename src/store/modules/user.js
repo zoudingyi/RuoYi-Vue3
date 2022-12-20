@@ -1,4 +1,5 @@
 import { getToken, removeToken } from '@/utils/auth';
+import { getUserInfo } from '@/api/login';
 import defAva from '@/assets/images/profile.jpg';
 const isDev = import.meta.env.DEV;
 
@@ -10,14 +11,10 @@ const useUserStore = defineStore('user', {
     roles: [],
     permissions: [],
     allRoles: [
-      {
-        id: 353,
-        label: 'admin'
-      },
-      {
-        id: 233,
-        label: 'edit'
-      }
+      // {
+      //   id: 353,
+      //   label: 'admin'
+      // }
     ] // 与后端约定的所有角色列表
   }),
   actions: {

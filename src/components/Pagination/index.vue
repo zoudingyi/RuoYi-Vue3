@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'hidden': hidden }" class="pagination-container">
+  <div class="pagination-container" :class="{ hidden: hidden }">
     <el-pagination
       :background="background"
       v-model:current-page="currentPage"
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { scrollTo } from '@/utils/scroll-to'
+import { scrollTo } from '@/utils/scroll-to';
 
 const props = defineProps({
   total: {
@@ -26,14 +26,14 @@ const props = defineProps({
     type: Number,
     default: 1
   },
-  limit: {
+  pageSize: {
     type: Number,
     default: 20
   },
   pageSizes: {
     type: Array,
     default() {
-      return [10, 20, 30, 50]
+      return [10, 20, 30, 50];
     }
   },
   // 移动端页码按钮的数量端默认值5
@@ -57,47 +57,52 @@ const props = defineProps({
     type: Boolean,
     default: false
   }
-})
+});
 
 const emit = defineEmits();
 const currentPage = computed({
   get() {
-    return props.page
+    return props.page;
   },
   set(val) {
-    emit('update:page', val)
+    emit('update:page', val);
   }
-})
+});
 const pageSize = computed({
   get() {
-    return props.limit
+    return props.pageSize;
   },
-  set(val){
-    emit('update:limit', val)
+  set(val) {
+    emit('update:pageSize', val);
   }
-})
+});
+
 function handleSizeChange(val) {
-  if (currentPage.value * val > props.total) {
-    currentPage.value = 1
-  }
-  emit('pagination', { page: currentPage.value, limit: val })
+  currentPage.value = 1;
+  emit('pageChange', { page: 1, pageSize: val });
   if (props.autoScroll) {
-    scrollTo(0, 800)
+    scrollTo(0, 800);
   }
 }
 function handleCurrentChange(val) {
-  emit('pagination', { page: val, limit: pageSize.value })
+  emit('pageChange', { page: val, pageSize: pageSize.value });
   if (props.autoScroll) {
-    scrollTo(0, 800)
+    scrollTo(0, 800);
   }
 }
-
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .pagination-container {
-  background: #fff;
-  padding: 32px 16px;
+  background: #3b3d4f;
+  :deep(.el-pagination) {
+    justify-content: flex-end;
+    font-size: 14px;
+    .el-pagination__total,
+    .el-pagination__jump {
+      color: #eeeeee;
+    }
+  }
 }
 .pagination-container.hidden {
   display: none;
