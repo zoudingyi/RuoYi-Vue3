@@ -2,12 +2,18 @@
   <div class="app-container">
     <el-button type="" @click="getList">console</el-button>
     <Test v-model:page="page"></Test> {{ page }}
+    <el-button type="" @click="download">download</el-button>
   </div>
 </template>
 <script>
 export default {
   created() {
     this.$message.success('this.$message');
+  },
+  methods: {
+    download() {
+      this.download('/template/keywords.csv');
+    }
   }
 };
 </script>

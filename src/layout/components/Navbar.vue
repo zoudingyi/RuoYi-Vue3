@@ -18,13 +18,13 @@
     />
 
     <div class="right-menu">
-      <template v-if="appStore.device !== 'mobile'">
+      <!-- <template v-if="appStore.device !== 'mobile'">
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
-      </template>
+      </template> -->
       <div class="avatar-container">
         <el-dropdown
           @command="handleCommand"
@@ -32,8 +32,10 @@
           trigger="click"
         >
           <div class="avatar-wrapper">
-            <img :src="userStore.avatar" class="user-avatar" />
-            <el-icon><caret-bottom /></el-icon>
+            <span class="user-name">
+              {{ userStore.name }}
+            </span>
+            <el-icon><ArrowDown /></el-icon>
           </div>
           <template #dropdown>
             <el-dropdown-menu>
@@ -170,22 +172,15 @@ function setLayout() {
       margin-right: 40px;
 
       .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
-
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        color: var(--el-color-primary);
+        .user-name {
+          font-size: 14px;
         }
-
         i {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
+          margin-left: 10px;
         }
       }
     }
