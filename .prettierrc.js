@@ -4,5 +4,6 @@ module.exports = {
   semi: true, // 强制句尾分号
   trailingComma: 'none', // 无尾逗号
   endOfLine: 'lf',
-  arrowParens: 'avoid' // 箭头函数参数括号 能省略括号的时候就省略
+  arrowParens: 'avoid', // 箭头函数参数括号 能省略括号的时候就省略
+  htmlWhitespaceSensitivity: 'ignore' //  vue template 中的结束标签结尾尖括号不掉到下一行
 };
