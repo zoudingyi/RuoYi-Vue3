@@ -12,7 +12,7 @@
 
 打开 [oauth2 页面](https://oauth2.mundossp.com/adm/#/admin/password)。登录并获取个人信息里的 key（或者去线上地址登录后获取 token）。本地调试的时候在根目录新建 .env.development.local 文件，复制下面的代码，并把自己的 key 填到 VITE_APP_TOKEN 里即可。
 
-```
+```javaScript
 # your key
 
 VITE_APP_TOKEN = ''
