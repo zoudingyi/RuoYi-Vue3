@@ -1,0 +1,9 @@
+*.bat
+*.yml
+*.html
+
+dist/
+package.json
+yarn.lock
+.vscode
+.cz-config.js
