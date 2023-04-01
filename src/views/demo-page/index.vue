@@ -1,39 +1,36 @@
 <template>
   <div class="app-container">
-    <el-button type="" @click="getList">console</el-button>
-    <Test v-model:page="page"></Test>
-    {{ page }}
-    <el-button type="" @click="download">download</el-button>
+    <primary-search>search</primary-search>
+    <primary-container>
+      <el-table :data="tableData" border stripe height="100%">
+        <el-table-column type="index" width="50" />
+        <el-table-column prop="name" label="name"></el-table-column>
+        <el-table-column prop="sex" label="sex"></el-table-column>
+      </el-table>
+
+      <pagination
+        v-model:page="pagesData.page"
+        v-model:pageSize="pagesData.pageSize"
+        :total="pagesData.total"
+        @pageChange="getTableData"
+      />
+    </primary-container>
   </div>
 </template>
-<script>
-export default {
-  created() {
-    this.$message.success('this.$message');
-  },
-  methods: {
-    download() {
-      this.download('/template/keywords.csv');
-    }
-  }
-};
-</script>
 
 <script setup>
 import { getOptions } from '@/api/login';
-import Test from './components/test.vue';
 const message = inject('$message');
 
-const page = ref(0);
-
-const getList = () => {
-  console.log('page :>> ', page.value);
-  // const params = getQueryObject();
-  // console.log('params :>> ', params);
-  // getOptions().then(res => {
-  //   console.log('res :>> ', res);
-  //   message.success('11111');
-  // });
+const tableData = ref([{ name: 'zdy', sex: 'man' }]);
+const pagesData = reactive({
+  page: 1,
+  pageSize: 20,
+  total: 100
+});
+const getTableData = () => {
+  getOptions().then(res => {});
+  console.log('pagesData :>> ', pagesData);
 };
 </script>
 

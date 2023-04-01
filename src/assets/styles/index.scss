@@ -125,16 +125,17 @@ aside {
 
 //main-container全局样式
 .app-container {
-  padding: 20px;
+  /* 50= navbar  50  */
+  height: calc(100vh - 50px);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .components-container {
   margin: 30px 50px;
   position: relative;
-}
-
-.pagination-container {
-  margin-top: 30px;
 }
 
 .text-center {

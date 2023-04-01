@@ -8,8 +8,8 @@
       :page-sizes="pageSizes"
       :pager-count="pagerCount"
       :total="total"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
+      @size-change="handleChange"
+      @current-change="handleChange"
     />
   </div>
 </template>
@@ -60,50 +60,23 @@ const props = defineProps({
 });
 
 const emit = defineEmits();
+
 const currentPage = computed({
-  get() {
-    return props.page;
-  },
-  set(val) {
-    emit('update:page', val);
-  }
+  get: () => props.page,
+  set: val => emit('update:page', val)
 });
 const pageSize = computed({
-  get() {
-    return props.pageSize;
-  },
-  set(val) {
-    emit('update:pageSize', val);
-  }
+  get: () => props.pageSize,
+  set: val => emit('update:pageSize', val)
 });
 
-function handleSizeChange(val) {
-  currentPage.value = 1;
-  emit('pageChange', { page: 1, pageSize: val });
-  if (props.autoScroll) {
-    scrollTo(0, 800);
-  }
-}
-function handleCurrentChange(val) {
-  emit('pageChange', { page: val, pageSize: pageSize.value });
-  if (props.autoScroll) {
-    scrollTo(0, 800);
-  }
-}
+const handleChange = () => {
+  emit('pageChange');
+  if (props.autoScroll) scrollTo(0, 800);
+};
 </script>
 
 <style lang="scss" scoped>
-.pagination-container {
-  background: #3b3d4f;
-  :deep(.el-pagination) {
-    justify-content: flex-end;
-    font-size: 14px;
-    .el-pagination__total,
-    .el-pagination__jump {
-      color: #eeeeee;
-    }
-  }
-}
 .pagination-container.hidden {
   display: none;
 }

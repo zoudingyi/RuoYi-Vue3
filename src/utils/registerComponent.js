@@ -2,9 +2,10 @@ import Cookies from 'js-cookie';
 import ElementPlus from 'element-plus';
 import { ElMessage } from 'element-plus';
 import locale from 'element-plus/lib/locale/lang/zh-cn'; // 中文语言
-
-// 分页组件
+// 全局组件
 import Pagination from '@/components/Pagination';
+import PrimarySearch from '@/components/PrimarySearch';
+import PrimaryContainer from '@/components/PrimaryContainer';
 
 import { download } from '@/utils/request';
 
@@ -18,6 +19,8 @@ export default function installComponents(app) {
 
   // 全局组件挂载
   app.component('Pagination', Pagination);
+  app.component('PrimarySearch', PrimarySearch);
+  app.component('PrimaryContainer', PrimaryContainer);
 
   // 全局方法挂载 Options API写法 this调用
   app.config.globalProperties.download = download;
