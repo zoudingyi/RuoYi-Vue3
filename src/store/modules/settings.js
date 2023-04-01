@@ -16,7 +16,7 @@ const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || '';
 const useSettingsStore = defineStore('settings', {
   state: () => ({
     title: '',
-    theme: storageSetting.theme || '#409EFF',
+    theme: storageSetting.theme || '#008080',
     sideTheme: storageSetting.sideTheme || sideTheme,
     showSettings: showSettings,
     topNav:

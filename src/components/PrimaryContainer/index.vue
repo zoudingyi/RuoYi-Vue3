@@ -1,7 +1,7 @@
 <template>
   <div class="primary-container">
-    <div class="buttons">
-      <slot name="button"></slot>
+    <div class="table-header">
+      <slot name="tableHeader"></slot>
     </div>
     <slot></slot>
   </div>
@@ -24,7 +24,7 @@ export default {};
   background-color: #ffffff;
   border: 1px solid #e4e7ed;
   box-shadow: 0 0 12px #0000000d;
-  .buttons {
+  .table-header {
     .el-button {
       margin-bottom: 15px;
     }

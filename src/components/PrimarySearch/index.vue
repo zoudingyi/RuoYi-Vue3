@@ -18,10 +18,12 @@ export default {};
   border: 1px solid #e4e7ed;
   box-shadow: 0 0 12px #0000000d;
 }
-::v-deep .el-form .el-form-item {
-  margin-bottom: 18px;
-  > .el-form-item__label {
-    font-weight: 500;
+:deep(.primary-search) {
+  .el-form .el-form-item {
+    margin-bottom: 18px;
+    > .el-form-item__label {
+      font-weight: 500;
+    }
   }
 }
 </style>
