@@ -79,13 +79,13 @@
     <el-divider />
 
     <h3 class="drawer-title">系统布局配置</h3>
-
-    <div class="drawer-item">
+    <!-- TODO bug：未设置多级菜单会报错 -->
+    <!-- <div class="drawer-item">
       <span>开启 TopNav</span>
       <span class="comp-style">
         <el-switch v-model="topNav" class="drawer-switch" />
       </span>
-    </div>
+    </div> -->
 
     <div class="drawer-item">
       <span>开启 Tags-Views</span>
@@ -127,8 +127,6 @@
 <script setup>
 import variables from '@/assets/styles/variables.module.scss';
 import originElementPlus from 'element-plus/theme-chalk/index.css';
-import axios from 'axios';
-import { ElLoading, ElMessage } from 'element-plus';
 import { useDynamicTitle } from '@/utils/dynamicTitle';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';

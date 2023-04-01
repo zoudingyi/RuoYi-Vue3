@@ -197,5 +197,5 @@ export function download(url, params, filename, config) {
       downloadLoadingInstance.close();
     });
 }
-// TODO 优化request
+
 export default service;
