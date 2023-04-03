@@ -8,9 +8,10 @@ export function getUserInfo() {
   });
 }
 
-export function getOptions() {
+export function getApps(params) {
   return request({
-    url: '/tag/get_options',
-    method: 'get'
+    url: '/app',
+    method: 'get',
+    params
   });
 }
