@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <primary-search>
-      <el-input v-model="searchParams.data" size="default" clearable></el-input>
+      <search-form :formItems="formItems" :formData="searchParams" />
     </primary-search>
     <primary-container>
       <template #tableHeader>
@@ -33,8 +33,13 @@ import { useTable } from '@/hooks/useTable';
 import { getApps } from '@/api/login';
 // const message = inject('$message');
 
+const formItems = [
+  {
+    prop: 'data'
+  }
+];
 const searchParams = reactive({
-  data: 1
+  data: '1'
 });
 const { loading, tableData, pages, total, getTableData, update } = useTable(
   getApps,

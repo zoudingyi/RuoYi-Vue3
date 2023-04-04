@@ -3,6 +3,7 @@ import ElementPlus from 'element-plus';
 import { ElMessage } from 'element-plus';
 import locale from 'element-plus/lib/locale/lang/zh-cn'; // 中文语言
 // 全局组件
+import SearchForm from '@/components/SearchForm';
 import Pagination from '@/components/Pagination';
 import PrimarySearch from '@/components/PrimarySearch';
 import PrimaryContainer from '@/components/PrimaryContainer';
@@ -18,6 +19,7 @@ export default function installComponents(app) {
   });
 
   // 全局组件挂载
+  app.component('SearchForm', SearchForm);
   app.component('Pagination', Pagination);
   app.component('PrimarySearch', PrimarySearch);
   app.component('PrimaryContainer', PrimaryContainer);

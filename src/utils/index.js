@@ -258,6 +258,31 @@ export function debounce(func, wait, immediate) {
 }
 
 /**
+ * @param {Function} func
+ * @param {number} wait // 停止后多少毫秒会触发一次
+ * @param {boolean} mustRun 每过多少毫秒会触发一次
+ * @return {*}
+ */
+export function throttle(func, wait, mustRun) {
+  let timeout,
+    startTime = new Date();
+  return function () {
+    let context = this,
+      args = arguments,
+      curTime = new Date();
+    clearTimeout(timeout);
+    if (curTime - startTime >= mustRun) {
+      func.apply(context, args);
+      startTime = curTime;
+    } else {
+      timeout = setTimeout(function () {
+        func.apply(context, args);
+      }, wait);
+    }
+  };
+}
+
+/**
  * This is just a simple version of deep copy
  * Has a lot of edge cases bug
  * If you want to use a perfect deep copy, use lodash's _.cloneDeep
