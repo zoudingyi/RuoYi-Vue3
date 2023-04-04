@@ -2,6 +2,8 @@ import Cookies from 'js-cookie';
 import ElementPlus from 'element-plus';
 import { ElMessage } from 'element-plus';
 import locale from 'element-plus/lib/locale/lang/zh-cn'; // 中文语言
+import 'element-plus/dist/index.css';
+
 // 全局组件
 import SearchForm from '@/components/SearchForm';
 import Pagination from '@/components/Pagination';
