@@ -6,6 +6,7 @@ import 'element-plus/dist/index.css';
 
 // 全局组件
 import SearchForm from '@/components/SearchForm';
+import BaseTable from '@/components/BaseTable';
 import Pagination from '@/components/Pagination';
 import PrimarySearch from '@/components/PrimarySearch';
 import PrimaryContainer from '@/components/PrimaryContainer';
@@ -22,6 +23,7 @@ export default function installComponents(app) {
 
   // 全局组件挂载
   app.component('SearchForm', SearchForm);
+  app.component('BaseTable', BaseTable);
   app.component('Pagination', Pagination);
   app.component('PrimarySearch', PrimarySearch);
   app.component('PrimaryContainer', PrimaryContainer);
