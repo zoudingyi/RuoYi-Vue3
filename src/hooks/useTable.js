@@ -33,10 +33,6 @@ export const useTable = (api, options) => {
         onFinally && onFinally();
       });
   };
-  const update = () => {
-    state.pages.page = 1;
-    getTableData();
-  };
 
   onMounted(() => {
     if (onPreprocess) {
@@ -49,7 +45,6 @@ export const useTable = (api, options) => {
 
   return {
     ...toRefs(state),
-    getTableData,
-    update
+    getTableData
   };
 };
