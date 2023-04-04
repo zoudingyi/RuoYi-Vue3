@@ -31,7 +31,7 @@ export default defineConfig(({ mode, command }) => {
       proxy: {
         // https://cn.vitejs.dev/config/#server-proxy
         '/dev-api': {
-          target: 'https://kat.zx-tech.net/',
+          target: 'https://test-super.zx-tech.net/',
           changeOrigin: true,
           rewrite: p => p.replace(/^\/dev-api/, '')
         }
