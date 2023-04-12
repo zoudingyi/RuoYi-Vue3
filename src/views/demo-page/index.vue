@@ -4,16 +4,19 @@
       <search-form
         :formItems="formItems"
         v-model:formData="searchParams"
-        @updata="getTableData"
+        @updateData="handleUpdateData"
+        manualReset
       />
     </primary-search>
     <primary-container>
       <template #tableHeader>
         <el-button type="primary" size="default" @click="">添加</el-button>
       </template>
+      <!-- <base-table></base-table> -->
       <el-table
         :data="tableData"
         v-loading="loading"
+        ref="tableRef"
         height="100%"
         border
         stripe
@@ -37,6 +40,7 @@ import { useTable } from '@/hooks/useTable';
 import { getApps } from '@/api/login';
 // const message = inject('$message');
 
+const tableRef = ref(null);
 const formItems = reactive({
   input: {
     component: 'input',
@@ -64,6 +68,24 @@ const formItems = reactive({
       {
         label: '套装',
         value: '套装'
+      }
+    ]
+  },
+  radio: {
+    component: 'radio-group',
+    label: '按钮',
+    options: [
+      {
+        label: '全部',
+        value: ''
+      },
+      {
+        label: '可用',
+        value: '1'
+      },
+      {
+        label: '停用',
+        value: '0'
       }
     ]
   },
@@ -123,17 +145,33 @@ const formItems = reactive({
     label: '日期范围'
   }
 });
-
 const searchParams = reactive({
   input: '',
   select: '',
+  radio: '',
   cascader: [],
   datePicker: []
 });
-
 const { loading, tableData, pages, total, getTableData } = useTable(getApps, {
-  searchParams
+  tableRef,
+  searchParams,
+  onPreprocess: () => {
+    console.log('onPreprocess');
+    return Promise.resolve();
+  },
+  onSuccess: () => {
+    console.log('onSuccess');
+  },
+  onFinally: () => {
+    console.log('onFinally');
+  }
 });
+const handleUpdateData = type => {
+  if (type === 'reset') {
+    // to do something
+  }
+  getTableData();
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,8 +1,8 @@
 <template>
-  <!-- 只适合常用的搜索组件：input select cascader date-time-piker -->
+  <!-- 只适合常用的搜索组件：input select cascader date-time-piker radio-->
   <el-form :model="searchParams" ref="search-form" :size="size">
     <div class="grid-container">
-      <div class="grid-item" v-for="(value, key) in formItems" :key="key">
+      <div class="grid-item" v-for="(value, key) in showFormItems" :key="key">
         <el-form-item :label="value.label">
           <component
             :is="`el-${value.component}`"
@@ -11,6 +11,8 @@
             :options="value.component === 'cascader' ? value.options : []"
             :placeholder="value.placeholder"
             :clearable="value.clearable ?? true"
+            @change="val => handleChange(key, val)"
+            :default-time="defaultTime"
             range-separator="至"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
@@ -26,6 +28,15 @@
                 :value="item.value"
               ></el-option>
             </template>
+            <template v-if="value.component === 'radio-group'">
+              <el-radio-button
+                v-for="(item, index) in value.options"
+                :key="index"
+                :label="item.value"
+              >
+                {{ item.label }}
+              </el-radio-button>
+            </template>
           </component>
         </el-form-item>
       </div>
@@ -40,8 +51,9 @@
 </template>
 
 <script setup>
-import { throttle } from '@/utils';
+import { throttle, deepClone } from '@/utils';
 
+const emit = defineEmits(['updateData', 'update:formData', 'change']);
 const props = defineProps({
   size: {
     type: String,
@@ -54,19 +66,38 @@ const props = defineProps({
   formItems: {
     type: Object,
     default: {}
+  },
+  // 手动重置搜索内容
+  manualReset: {
+    type: Boolean,
+    default: false
   }
 });
 
+// 默认初始搜索值
+const defaultSearchParams = deepClone(props.formData);
+const defaultTime = [
+  new Date(2000, 1, 1, 0, 0, 0),
+  new Date(2000, 2, 1, 23, 59, 59)
+];
 const columnMax = ref(4);
-
-const emit = defineEmits();
+const showFormItems = computed(() => {
+  const items = {};
+  Object.keys(props.formItems).forEach(key => {
+    if (!props.formItems[key].hidden) {
+      items[key] = props.formItems[key];
+    }
+  });
+  return items;
+});
 const searchParams = computed({
   get: () => props.formData,
   set: val => emit('update:formData', val)
 });
 const getButtonSpan = computed(() => {
   const spanNum =
-    columnMax.value - (Object.keys(props.formItems).length % columnMax.value);
+    columnMax.value -
+    (Object.keys(showFormItems.value).length % columnMax.value);
   return { 'grid-column': 'span ' + spanNum };
 });
 
@@ -92,19 +123,21 @@ const resize = () => {
 };
 const listenResize = throttle(resize, 100, 250);
 
-const search = () => emit('updata');
+const search = () => emit('updateData', 'search');
+
 const reset = () => {
-  Object.keys(searchParams.value).forEach(key => {
-    if (Array.isArray(searchParams.value[key])) {
-      searchParams.value[key] = [];
-    } else {
-      searchParams.value[key] = '';
-    }
-  });
-  emit('updata');
+  if (!props.manualReset) {
+    // 重置为初始值
+    Object.keys(searchParams.value).forEach(key => {
+      searchParams.value[key] = defaultSearchParams[key];
+    });
+  }
+  emit('updateData', 'reset');
 };
+const handleChange = (key, val) => emit('change', { key, val });
 
 onMounted(() => {
+  resize();
   window.addEventListener('resize', listenResize, false);
 });
 onUnmounted(() => {

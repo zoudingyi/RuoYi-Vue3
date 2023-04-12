@@ -15,8 +15,6 @@
 </template>
 
 <script setup>
-import { scrollTo } from '@/utils/scroll-to';
-
 const props = defineProps({
   total: {
     required: true,
@@ -49,17 +47,13 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  autoScroll: {
-    type: Boolean,
-    default: true
-  },
   hidden: {
     type: Boolean,
     default: false
   }
 });
 
-const emit = defineEmits();
+const emit = defineEmits(['update:page', 'update:pageSize', 'pageChange']);
 
 const currentPage = computed({
   get: () => props.page,
@@ -70,10 +64,7 @@ const pageSize = computed({
   set: val => emit('update:pageSize', val)
 });
 
-const handleChange = () => {
-  emit('pageChange');
-  if (props.autoScroll) scrollTo(0, 800);
-};
+const handleChange = () => emit('pageChange');
 </script>
 
 <style lang="scss" scoped>

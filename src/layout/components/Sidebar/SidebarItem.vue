@@ -33,7 +33,7 @@
       v-else
       ref="subMenu"
       :index="resolvePath(item.path)"
-      popper-append-to-body
+      teleported
     >
       <template v-if="item.meta" #title>
         <svg-icon :icon-class="item.meta && item.meta.icon" />
