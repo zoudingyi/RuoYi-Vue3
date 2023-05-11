@@ -76,12 +76,13 @@ export const dynamicRoutes = [
   {
     path: '/demo-page',
     component: Layout,
-    roles: ['common'],
+    permissions: ['homePage:operator:user'],
     children: [
       {
         path: 'index',
         component: () => import('@/views/demo-page/index'),
         name: 'Intentions',
+        permissions: ['homePage:operator:user'],
         meta: {
           title: '菜单-1',
           icon: 'user'

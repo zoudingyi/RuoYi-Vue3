@@ -9,13 +9,14 @@ const useUserStore = defineStore('user', {
     name: '',
     avatar: '',
     roles: [],
-    permissions: [],
-    allRoles: [
-      // {
-      //   id: 353,
-      //   label: 'admin'
-      // }
-    ] // 与后端约定的所有角色列表
+    permissions: [], // 用户当前拥有的权限
+    allPermissions: [
+      {
+        id: 0,
+        key: 'home', // 主页（与后端约定的key）
+        permission: 'homePage:operator:user' // 自定义权限名称
+      }
+    ] // 权限系统设定的所有权限
   }),
   actions: {
     // 登录 oauth2页面会自动存储cookie
@@ -25,37 +26,48 @@ const useUserStore = defineStore('user', {
     // 获取用户信息
     getInfo() {
       return new Promise(async resolve => {
-        let response = null;
-        if (!isDev) response = await getUserInfo();
-        const data = {
+        const userInfo = {
           user: {
-            userName: response?.data.name ?? 'developer',
-            avatar: response?.data.avatar ?? defAva
+            userName: 'admin',
+            avatar: defAva
           },
-          roles: isDev ? ['admin'] : this.rolesMatch(response),
+          roles: ['admin'],
           permissions: ['*:*:*']
+          // permissions: ['homePage:operator:user', 'homePage:purchaser:user']
         };
 
-        const { user, roles, permissions } = data;
-        if (roles && roles.length > 0) {
-          // 验证返回的roles是否是一个非空数组
-          this.roles = roles;
-          this.permissions = permissions;
-        } else {
-          this.roles = ['common'];
+        // 生产环境
+        if (!isDev) {
+          const { data: info } = await getUserInfo();
+          const { data: permissionsArr } = await getPermissions();
+          this.assignPermissions(permissionsArr);
+          userInfo.user.userName = info.name;
+          userInfo.roles = ['user'];
+          userInfo.permissions = this.fetchPermissions(info.authlist);
         }
+
+        const { user, roles, permissions } = userInfo;
         this.name = user.userName;
         this.avatar = user.avatar;
-        resolve(data);
+        this.roles = roles;
+        this.permissions = permissions;
+        resolve(userInfo);
       });
     },
-    // 判断用户有哪些角色
-    rolesMatch(response) {
-      return response.data.role_id_list.map(roleId => {
-        const index = this.allRoles.findIndex(item => item.id == roleId);
-        if (index != -1) {
-          return this.allRoles[index].label;
+    // 根据用户拥有的权限ID获取相应的页面权限
+    fetchPermissions(permissionIDs) {
+      const permissions = [];
+      this.allPermissions.forEach(item => {
+        if (permissionIDs.includes(item.id)) {
+          permissions.push(item.permission);
         }
+      });
+      return permissions;
+    },
+    // 获取权限对应的ID并赋值（由于ID可能会变，所以要从后端获取具体ID）
+    assignPermissions(permissions) {
+      this.allPermissions.forEach(item => {
+        item.id = permissions[item.key];
       });
     },
     // 退出系统

@@ -103,12 +103,25 @@ export function filterDynamicRoutes(routes) {
   routes.forEach(route => {
     if (route.permissions) {
       if (auth.hasPermiOr(route.permissions)) {
+        if (route.children) {
+          route.children = filterDynamicRoutes(route.children);
+        }
         res.push(route);
       }
     } else if (route.roles) {
       if (auth.hasRoleOr(route.roles)) {
+        if (route.children) {
+          route.children = filterDynamicRoutes(route.children);
+        }
         res.push(route);
       }
+    }
+    // 如果不设置permissions和roles 默认可以访问但要判断子路由权限
+    if (!route.permissions && !route.roles) {
+      if (route.children) {
+        route.children = filterDynamicRoutes(route.children);
+      }
+      res.push(route);
     }
   });
   return res;
