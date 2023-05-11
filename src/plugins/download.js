@@ -12,7 +12,7 @@ export default {
     var url =
       baseURL +
       '/common/download?fileName=' +
-      encodeURI(name) +
+      encodeURIComponent(name) +
       '&delete=' +
       isDelete;
     axios({
@@ -20,11 +20,11 @@ export default {
       url: url,
       responseType: 'blob',
       headers: { Authorization: 'Bearer ' + getToken() }
-    }).then(async res => {
-      const isLogin = await blobValidate(res.data);
-      if (isLogin) {
+    }).then(res => {
+      const isBlob = blobValidate(res.data);
+      if (isBlob) {
         const blob = new Blob([res.data]);
-        this.saveAs(blob, decodeURI(res.headers['download-filename']));
+        this.saveAs(blob, decodeURIComponent(res.headers['download-filename']));
       } else {
         this.printErrMsg(res.data);
       }
@@ -32,17 +32,19 @@ export default {
   },
   resource(resource) {
     var url =
-      baseURL + '/common/download/resource?resource=' + encodeURI(resource);
+      baseURL +
+      '/common/download/resource?resource=' +
+      encodeURIComponent(resource);
     axios({
       method: 'get',
       url: url,
       responseType: 'blob',
       headers: { Authorization: 'Bearer ' + getToken() }
-    }).then(async res => {
-      const isLogin = await blobValidate(res.data);
-      if (isLogin) {
+    }).then(res => {
+      const isBlob = blobValidate(res.data);
+      if (isBlob) {
         const blob = new Blob([res.data]);
-        this.saveAs(blob, decodeURI(res.headers['download-filename']));
+        this.saveAs(blob, decodeURIComponent(res.headers['download-filename']));
       } else {
         this.printErrMsg(res.data);
       }
@@ -55,9 +57,9 @@ export default {
       url: url,
       responseType: 'blob',
       headers: { Authorization: 'Bearer ' + getToken() }
-    }).then(async res => {
-      const isLogin = await blobValidate(res.data);
-      if (isLogin) {
+    }).then(res => {
+      const isBlob = blobValidate(res.data);
+      if (isBlob) {
         const blob = new Blob([res.data], { type: 'application/zip' });
         this.saveAs(blob, name);
       } else {
