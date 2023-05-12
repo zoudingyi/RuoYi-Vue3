@@ -5,6 +5,7 @@ import {
 } from 'vue-router';
 /* Layout */
 import Layout from '@/layout';
+import useUserStore from '@/store/modules/user';
 
 /**
  * Note: 路由配置项
@@ -60,6 +61,7 @@ export const constantRoutes = [
     path: '',
     component: Layout,
     redirect: '/index',
+    // hidden: true,
     children: [
       {
         path: '/index',
@@ -67,7 +69,18 @@ export const constantRoutes = [
         name: 'Index',
         meta: { title: '首页', icon: 'dashboard', affix: true }
       }
-    ]
+    ],
+    beforeEnter: (to, from) => {
+      // 可做首页路由判断，条件展示某个有权限的路由当首页
+      const { permissions } = useUserStore();
+      // if (permissions.includes('demo:user:page')) {
+      //   return { name: 'Demo' };
+      // }
+      if (permissions.length === 0) {
+        return { path: '/401' };
+      }
+      return true;
+    }
   }
 ];
 
@@ -76,25 +89,40 @@ export const dynamicRoutes = [
   {
     path: '/demo-page',
     component: Layout,
-    permissions: ['homePage:operator:user'],
+    alwaysShow: true,
+    // permissions: ['demo:user:page'],
+    meta: {
+      title: '一级菜单',
+      icon: 'user'
+    },
     children: [
       {
-        path: 'index',
+        path: 'demo1',
         component: () => import('@/views/demo-page/index'),
-        name: 'Intentions',
-        permissions: ['homePage:operator:user'],
+        name: 'Demo1',
+        // permissions: ['demo:user:eidt'],
         meta: {
-          title: '菜单-1',
+          title: '二级菜单1-1',
           icon: 'user'
         }
+      },
+      {
+        path: 'demo2',
+        name: 'Demo2',
+        // permissions: ['demo:user:page'],
+        meta: {
+          title: '二级菜单1-2',
+          icon: 'user'
+        },
+        component: () => import('@/views/demo-page/other')
       }
     ]
   }
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  // history: createWebHashHistory(), // hash router
+  // history: createWebHistory(),
+  history: createWebHashHistory(), // hash router
   routes: constantRoutes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

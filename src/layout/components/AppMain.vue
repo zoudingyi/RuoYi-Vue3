@@ -45,6 +45,10 @@ const tagsViewStore = useTagsViewStore();
   .fixed-header + .app-main {
     padding-top: 84px;
   }
+  .app-container {
+    /* 84 = navbar + tags-view = 50 + 34 */
+    height: calc(100vh - 84px);
+  }
 }
 </style>
 

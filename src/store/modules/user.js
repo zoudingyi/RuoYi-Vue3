@@ -13,8 +13,8 @@ const useUserStore = defineStore('user', {
     allPermissions: [
       {
         id: 0,
-        key: 'home', // 主页（与后端约定的key）
-        permission: 'homePage:operator:user' // 自定义权限名称
+        key: 'demo', // 主页（与后端约定的key）
+        permission: 'demo:user:page' // 自定义权限名称
       }
     ] // 权限系统设定的所有权限
   }),
@@ -32,8 +32,8 @@ const useUserStore = defineStore('user', {
             avatar: defAva
           },
           roles: ['admin'],
-          permissions: ['*:*:*']
-          // permissions: ['homePage:operator:user', 'homePage:purchaser:user']
+          // permissions: ['*:*:*']
+          permissions: ['demo:user:page', 'demo:user:add']
         };
 
         // 生产环境

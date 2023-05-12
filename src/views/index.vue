@@ -1,3 +1,5 @@
 <template>
-  <div class="app-container home">homePage</div>
+  <div class="app-container">
+    <primary-container>homePage</primary-container>
+  </div>
 </template>

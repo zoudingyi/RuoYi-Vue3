@@ -115,9 +115,8 @@ export function filterDynamicRoutes(routes) {
         }
         res.push(route);
       }
-    }
-    // 如果不设置permissions和roles 默认可以访问但要判断子路由权限
-    if (!route.permissions && !route.roles) {
+    } else {
+      // 如果不设置permissions和roles 默认可以访问父级 但要判断子路由权限
       if (route.children) {
         route.children = filterDynamicRoutes(route.children);
       }
