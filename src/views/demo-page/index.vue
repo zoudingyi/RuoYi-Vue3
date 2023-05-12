@@ -10,7 +10,14 @@
     </primary-search>
     <primary-container>
       <template #tableHeader>
-        <el-button type="primary" size="default" @click="">添加</el-button>
+        <el-button
+          v-if="$auth.hasPermi('demo:user:edit')"
+          type="primary"
+          size="default"
+          @click="handleAdd"
+        >
+          添加
+        </el-button>
       </template>
       <!-- <base-table></base-table> -->
       <el-table
@@ -38,7 +45,7 @@
 <script setup>
 import { useTable } from '@/hooks/useTable';
 import { getList } from '@/api/demo.js';
-// const message = inject('$message');
+const message = inject('$modal');
 
 const tableRef = ref(null);
 const formItems = reactive({
@@ -172,6 +179,9 @@ const handleUpdateData = type => {
     // to do something
   }
   getTableData();
+};
+const handleAdd = () => {
+  message.error('成功！');
 };
 </script>
 

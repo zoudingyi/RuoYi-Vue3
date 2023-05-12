@@ -2,12 +2,14 @@ import tab from './tab';
 import auth from './auth';
 import cache from './cache';
 import modal from './modal';
-import download from './download';
+// import download from './download';
+// import { download } from '@/utils/request';
 
+// 全局方法挂载
 export default function installPlugins(app) {
   // 页签操作
-  app.config.globalProperties.$tab = tab; // Options API
-  app.provide('$tab', tab); // Composition API
+  app.config.globalProperties.$tab = tab; // Options API写法 this调用
+  app.provide('$tab', tab); // Composition API写法，用provide、inject方法实现全局调用 尽量避免使用getCurrentInstance().proxy  https://github.com/vuejs/vue/issues/12596
   // 认证对象
   app.config.globalProperties.$auth = auth;
   app.provide('$auth', auth);
@@ -19,4 +21,5 @@ export default function installPlugins(app) {
   app.provide('$modal', modal);
   // 下载文件
   // app.config.globalProperties.$download = download
+  // app.config.globalProperties.download = download;
 }

@@ -154,6 +154,7 @@ service.interceptors.response.use(
     ElMessage({
       message: message,
       type: 'error',
+      grouping: true,
       duration: 5 * 1000
     });
     return Promise.reject(error);

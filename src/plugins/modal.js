@@ -8,21 +8,17 @@ import {
 let loadingInstance;
 
 export default {
-  // 消息提示
-  msg(content) {
-    ElMessage.info(content);
+  success(content) {
+    ElMessage.closeAll();
+    ElMessage({ message: content, type: 'success' });
   },
-  // 错误消息
-  msgError(content) {
-    ElMessage.error(content);
+  warning(content) {
+    ElMessage.closeAll();
+    ElMessage({ message: content, type: 'warning' });
   },
-  // 成功消息
-  msgSuccess(content) {
-    ElMessage.success(content);
-  },
-  // 警告消息
-  msgWarning(content) {
-    ElMessage.warning(content);
+  error(content) {
+    ElMessage.closeAll();
+    ElMessage({ message: content, type: 'error' });
   },
   // 弹出提示
   alert(content) {
