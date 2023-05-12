@@ -27,8 +27,8 @@ const useUserStore = defineStore('user', {
         const userInfo = {
           userName: 'admin',
           roles: ['admin'],
-          permissions: ['*:*:*']
-          // permissions: ['demo:user:page', 'demo:user:add'] // '*:*:*'为超级管理权限，开发中也可自行配置权限进行测试
+          // permissions: ['*:*:*'] // 超级管理权限
+          permissions: ['demo:user:page', 'demo:user:edit'] // 开发中可自行配置权限进行测试
         };
 
         // 生产环境 （需要测试生产环境流程可以删掉这层if判断）

@@ -61,7 +61,7 @@ export const constantRoutes = [
     path: '',
     component: Layout,
     redirect: '/index',
-    // hidden: true,
+    hidden: true,
     children: [
       {
         path: '/index',
@@ -71,11 +71,11 @@ export const constantRoutes = [
       }
     ],
     beforeEnter: (to, from) => {
-      // 可做首页路由判断，条件展示某个有权限的路由当首页
+      // 可做首页路由判断，进入首页自动重定向到某个有权限的路由
       const { permissions } = useUserStore();
-      // if (permissions.includes('demo:user:page')) {
-      //   return { name: 'Demo' };
-      // }
+      if (permissions.includes('demo:user:page')) {
+        return { name: 'Demo1' };
+      }
       if (permissions.length === 0) {
         return { path: '/401' };
       }
@@ -90,17 +90,27 @@ export const dynamicRoutes = [
     path: '/demo-page',
     component: Layout,
     alwaysShow: true,
-    // permissions: ['demo:user:page'],
+    permissions: ['demo:user:page', 'demo:user:edit'], // 可以不设置父级权限，请确保当前权限至少含一个子级权限，不然会单独显示一个父级菜单。
     meta: {
       title: '一级菜单',
       icon: 'user'
+    },
+    beforeEnter: to => {
+      // 导航栏重定向 （由于动态渲染路由，就不能通过redirect重定向到固定路由，可以在这里做条件判断，重定向到拥有权限的路由）
+      if (to.fullPath === '/demo-page') {
+        const permissions = useUserStore().permissions;
+        if (permissions.includes('demo:user:page')) {
+          return { name: 'Demo1' };
+        }
+      }
+      return true;
     },
     children: [
       {
         path: 'demo1',
         component: () => import('@/views/demo-page/index'),
         name: 'Demo1',
-        // permissions: ['demo:user:eidt'],
+        permissions: ['demo:user:page'],
         meta: {
           title: '二级菜单1-1',
           icon: 'user'
@@ -109,7 +119,7 @@ export const dynamicRoutes = [
       {
         path: 'demo2',
         name: 'Demo2',
-        // permissions: ['demo:user:page'],
+        permissions: ['demo:user:edit'],
         meta: {
           title: '二级菜单1-2',
           icon: 'user'
