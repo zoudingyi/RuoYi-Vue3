@@ -37,7 +37,7 @@
 
 <script setup>
 import { useTable } from '@/hooks/useTable';
-import { getApps } from '@/api/login';
+import { getList } from '@/api/demo.js';
 // const message = inject('$message');
 
 const tableRef = ref(null);
@@ -152,7 +152,8 @@ const searchParams = reactive({
   cascader: [],
   datePicker: []
 });
-const { loading, tableData, pages, total, getTableData } = useTable(getApps, {
+
+const { loading, tableData, pages, total, getTableData } = useTable(getList, {
   tableRef,
   searchParams,
   onPreprocess: () => {

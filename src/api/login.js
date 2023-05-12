@@ -8,10 +8,10 @@ export function getUserInfo() {
   });
 }
 
-export function getApps(params) {
+// 获取系统权限id列表
+export function getPermissions() {
   return request({
-    url: '/app',
-    method: 'get',
-    params
+    url: '/permissions',
+    method: 'get'
   });
 }

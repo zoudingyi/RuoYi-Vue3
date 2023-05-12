@@ -1,13 +1,11 @@
 import { getToken, removeToken } from '@/utils/auth';
-import { getUserInfo } from '@/api/login';
-import defAva from '@/assets/images/profile.jpg';
+import { getUserInfo, getPermissions } from '@/api/login';
 const isDev = import.meta.env.DEV;
 
 const useUserStore = defineStore('user', {
   state: () => ({
     token: getToken(),
     name: '',
-    avatar: '',
     roles: [],
     permissions: [], // 用户当前拥有的权限
     allPermissions: [
@@ -27,28 +25,24 @@ const useUserStore = defineStore('user', {
     getInfo() {
       return new Promise(async resolve => {
         const userInfo = {
-          user: {
-            userName: 'admin',
-            avatar: defAva
-          },
+          userName: 'admin',
           roles: ['admin'],
-          // permissions: ['*:*:*']
-          permissions: ['demo:user:page', 'demo:user:add']
+          permissions: ['*:*:*']
+          // permissions: ['demo:user:page', 'demo:user:add'] // '*:*:*'为超级管理权限，开发中也可自行配置权限进行测试
         };
 
-        // 生产环境
+        // 生产环境 （需要测试生产环境流程可以删掉这层if判断）
         if (!isDev) {
           const { data: info } = await getUserInfo();
           const { data: permissionsArr } = await getPermissions();
-          this.assignPermissions(permissionsArr);
-          userInfo.user.userName = info.name;
-          userInfo.roles = ['user'];
+          this.assignPermissions(permissionsArr); // 如果后端没有做获取权限id的接口则取消这一步，并把权限系统对应的权限id配置在allPermissions里
+          userInfo.userName = info.name;
+          userInfo.roles = ['user']; // 权限系统都是页面和功能级别的权限，暂时不用roles
           userInfo.permissions = this.fetchPermissions(info.authlist);
         }
 
-        const { user, roles, permissions } = userInfo;
-        this.name = user.userName;
-        this.avatar = user.avatar;
+        const { userName, roles, permissions } = userInfo;
+        this.name = userName;
         this.roles = roles;
         this.permissions = permissions;
         resolve(userInfo);
