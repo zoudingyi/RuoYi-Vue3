@@ -19,7 +19,8 @@ export default function installPlugins(app) {
   // 模态框对象
   app.config.globalProperties.$modal = modal;
   app.provide('$modal', modal);
-  // 下载文件
+
+  // TODO 下载文件
   // app.config.globalProperties.$download = download
   // app.config.globalProperties.download = download;
 }

@@ -2,8 +2,8 @@
   <div class="app-container">
     <primary-search>
       <search-form
-        :formItems="formItems"
         v-model:formData="searchParams"
+        :formItems="formItems"
         @updateData="handleUpdateData"
         manualReset
       />
@@ -30,11 +30,15 @@
       >
         <el-table-column type="index" width="50" />
         <el-table-column prop="name" label="name"></el-table-column>
-        <el-table-column prop="edituser" label="sex"></el-table-column>
+        <el-table-column prop="status" label="status"></el-table-column>
+        <el-table-column
+          prop="created_at"
+          label="created_time"
+        ></el-table-column>
       </el-table>
       <pagination
         v-model:page="pages.page"
-        v-model:pageSize="pages.pageSize"
+        v-model:pageSize="pages.limit"
         :total="total"
         @pageChange="getTableData"
       />
@@ -44,7 +48,8 @@
 
 <script setup>
 import { useTable } from '@/hooks/useTable';
-import { getList } from '@/api/demo.js';
+import { getRemoteAPI, getList } from '@/api/demo.js';
+import { addDateRange } from '@/utils/ruoyi';
 const message = inject('$modal');
 
 const tableRef = ref(null);
@@ -147,7 +152,8 @@ const formItems = reactive({
   datePicker: {
     component: 'date-picker',
     props: {
-      type: 'datetimerange'
+      type: 'datetimerange',
+      'value-format': 'YYYY-MM-DD HH:mm:ss'
     },
     label: '日期范围'
   }
@@ -160,25 +166,36 @@ const searchParams = reactive({
   datePicker: []
 });
 
-const { loading, tableData, pages, total, getTableData } = useTable(getList, {
-  tableRef,
-  searchParams,
-  onPreprocess: () => {
-    console.log('onPreprocess');
-    return Promise.resolve();
-  },
-  onSuccess: () => {
-    console.log('onSuccess');
-  },
-  onFinally: () => {
-    console.log('onFinally');
+const { loading, tableData, pages, total, getTableData } = useTable(
+  getRemoteAPI,
+  {
+    tableRef,
+    searchParams,
+    pages: {
+      page: 1,
+      limit: 20
+    },
+    onPreprocess: () => {
+      console.log('onPreprocess');
+      return Promise.resolve();
+    },
+    onSuccess: res => {
+      console.log('onSuccess');
+    },
+    onFinally: () => {
+      console.log('onFinally');
+    }
   }
-});
+);
 const handleUpdateData = type => {
   if (type === 'reset') {
     // to do something
   }
-  getTableData();
+  console.log('searchParams :>> ', searchParams);
+  // TODO 优化组件
+  const adat = addDateRange(searchParams, searchParams.datePicker);
+  console.log('adat :>> ', adat);
+  // getTableData();
 };
 const handleAdd = () => {
   message.error('成功！');
