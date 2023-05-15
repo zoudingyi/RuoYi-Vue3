@@ -19,23 +19,12 @@
           添加
         </el-button>
       </template>
-      <!-- <base-table></base-table> -->
-      <el-table
-        :data="tableData"
-        v-loading="loading"
+      <base-table
         ref="tableRef"
-        height="100%"
-        border
-        stripe
-      >
-        <el-table-column type="index" width="50" />
-        <el-table-column prop="name" label="name"></el-table-column>
-        <el-table-column prop="status" label="status"></el-table-column>
-        <el-table-column
-          prop="created_at"
-          label="created_time"
-        ></el-table-column>
-      </el-table>
+        :data="tableData"
+        :loading="loading"
+        :columns="columns"
+      ></base-table>
       <pagination
         v-model:page="pages.page"
         v-model:pageSize="pages.limit"
@@ -191,11 +180,21 @@ const searchParams = reactive({
   starTime: '',
   endTime: ''
 });
+const columns = ref([
+  {
+    prop: 'name',
+    label: 'name'
+  },
+  {
+    prop: 'status',
+    label: 'status'
+  }
+]);
 
 const { loading, tableData, pages, total, getTableData } = useTable(
   getRemoteAPI,
   {
-    tableRef,
+    // tableRef,
     searchParams,
     pages: {
       page: 1,
@@ -224,7 +223,7 @@ const handleUpdateData = type => {
   }
 
   console.log('searchParams :>> ', searchParams);
-  // getTableData();
+  getTableData();
 };
 const handleAdd = () => {
   message.error('成功！');
