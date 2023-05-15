@@ -1,5 +1,5 @@
 <template>
-  <!-- 只适合常用的搜索组件：input select cascader date-time-piker radio-->
+  <!-- 适合element常规搜索组件：input select cascader date-time-piker radio checkbox -->
   <el-form :model="searchParams" ref="search-form" :size="size">
     <div class="grid-container">
       <div class="grid-item" v-for="(value, key) in showFormItems" :key="key">
@@ -36,6 +36,15 @@
               >
                 {{ item.label }}
               </el-radio-button>
+            </template>
+            <template v-if="value.component === 'checkbox-group'">
+              <el-checkbox-button
+                v-for="(item, index) in value.options"
+                :key="index"
+                :label="item.value"
+              >
+                {{ item.label }}
+              </el-checkbox-button>
             </template>
           </component>
         </el-form-item>
@@ -126,8 +135,8 @@ const listenResize = throttle(resize, 100, 250);
 const search = () => emit('updateData', 'search');
 
 const reset = () => {
+  // 重置为初始值
   if (!props.manualReset) {
-    // 重置为初始值
     Object.keys(searchParams.value).forEach(key => {
       searchParams.value[key] = defaultSearchParams[key];
     });
@@ -157,6 +166,9 @@ onUnmounted(() => {
       .el-input,
       .el-cascader {
         width: 100%;
+      }
+      .el-checkbox-button__inner {
+        font-weight: normal;
       }
     }
   }

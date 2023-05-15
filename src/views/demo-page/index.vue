@@ -5,7 +5,7 @@
         v-model:formData="searchParams"
         :formItems="formItems"
         @updateData="handleUpdateData"
-        manualReset
+        @change="handleChange"
       />
     </primary-search>
     <primary-container>
@@ -49,7 +49,7 @@
 <script setup>
 import { useTable } from '@/hooks/useTable';
 import { getRemoteAPI, getList } from '@/api/demo.js';
-import { addDateRange } from '@/utils/ruoyi';
+import { splitDateRange } from '@/utils/ruoyi';
 const message = inject('$modal');
 
 const tableRef = ref(null);
@@ -58,6 +58,7 @@ const formItems = reactive({
     component: 'input',
     label: '搜索',
     placeholder: '请输入'
+    // hidden: true
     // disabled: true
   },
   select: {
@@ -66,13 +67,9 @@ const formItems = reactive({
     placeholder: '请选择',
     props: {
       // disabled: true,
-      multiple: true
+      // multiple: true
     },
     options: [
-      {
-        label: '全部',
-        value: '全部'
-      },
       {
         label: '单品',
         value: '单品'
@@ -86,6 +83,10 @@ const formItems = reactive({
   radio: {
     component: 'radio-group',
     label: '按钮',
+    props: {
+      // disabled: true,
+      // multiple: true
+    },
     options: [
       {
         label: '全部',
@@ -98,6 +99,28 @@ const formItems = reactive({
       {
         label: '停用',
         value: '0'
+      }
+    ]
+  },
+  checkbox: {
+    component: 'checkbox-group',
+    label: '多选',
+    props: {
+      // disabled: true,
+      // multiple: true
+    },
+    options: [
+      {
+        label: '选项1',
+        value: '1'
+      },
+      {
+        label: '选项2',
+        value: '2'
+      },
+      {
+        label: '选项3',
+        value: '3'
       }
     ]
   },
@@ -162,8 +185,11 @@ const searchParams = reactive({
   input: '',
   select: '',
   radio: '',
+  checkbox: [],
   cascader: [],
-  datePicker: []
+  datePicker: [],
+  starTime: '',
+  endTime: ''
 });
 
 const { loading, tableData, pages, total, getTableData } = useTable(
@@ -187,14 +213,17 @@ const { loading, tableData, pages, total, getTableData } = useTable(
     }
   }
 );
+const handleChange = ({ key, val }) => {
+  if (key === 'datePicker') {
+    splitDateRange(searchParams, val, ['starTime', 'endTime']);
+  }
+};
 const handleUpdateData = type => {
   if (type === 'reset') {
     // to do something
   }
+
   console.log('searchParams :>> ', searchParams);
-  // TODO 优化组件
-  const adat = addDateRange(searchParams, searchParams.datePicker);
-  console.log('adat :>> ', adat);
   // getTableData();
 };
 const handleAdd = () => {

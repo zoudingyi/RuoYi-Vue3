@@ -68,6 +68,33 @@ export function addDateRange(params, dateRange, propName) {
   return search;
 }
 
+// 拆分日期范围 （名称可自行修改）
+export function splitDateRange(params, dateRange, propName = []) {
+  const [beginName, endName] = propName;
+  if (params) {
+    if (Array.isArray(dateRange)) {
+      const [beginTime, endTime] = dateRange;
+      // 赋值
+      if (beginName && endName) {
+        params[beginName] = beginTime ?? '';
+        params[endName] = endTime ?? '';
+      } else {
+        params['beginTime'] = beginTime ?? '';
+        params['endTime'] = endTime ?? '';
+      }
+    } else {
+      // 清空
+      if (beginName && endName) {
+        params[beginName] = '';
+        params[endName] = '';
+      } else {
+        params['beginTime'] = '';
+        params['endTime'] = '';
+      }
+    }
+  }
+}
+
 // 回显数据字典
 export function selectDictLabel(datas, value) {
   if (value === undefined) {
