@@ -244,6 +244,7 @@ const columns = ref([
   },
   {
     label: '操作',
+    width: '160px',
     buttons: [
       {
         text: '编辑',
@@ -255,6 +256,16 @@ const columns = ref([
           row.loading = true;
           setTimeout(() => {
             row.loading = false;
+          }, 2000);
+        }
+      },
+      {
+        text: '隐藏按钮',
+        hide: 'isHide',
+        click: row => {
+          row.isHide = true;
+          setTimeout(() => {
+            row.isHide = false;
           }, 2000);
         }
       }

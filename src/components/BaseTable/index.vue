@@ -30,6 +30,7 @@
         <template v-else-if="item.buttons">
           <el-button
             v-for="button in item.buttons"
+            v-show="!scope.row[button.hide]"
             :key="button.text"
             type="primary"
             link
