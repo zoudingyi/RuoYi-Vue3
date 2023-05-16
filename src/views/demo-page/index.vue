@@ -21,13 +21,31 @@
       </template>
       <base-table
         ref="tableRef"
+        type="selection"
         :data="tableData"
         :loading="loading"
         :columns="columns"
-      ></base-table>
+        :otherProp="{
+          defaultSort: { prop: 'totaltime', order: 'ascending' }
+        }"
+      >
+        <!-- 自定义slot -->
+        <template #pos="{ scope }">
+          {{ scope.row.pos }} ({{ scope.row.points }})
+        </template>
+        <template #rider="{ scope }">
+          {{ scope.row.number }}
+          <span style="font-weight: bold">{{ scope.row.rider }}</span>
+        </template>
+        <!-- 自定义表头 -->
+        <template #nationHeader>
+          <el-icon><Location /></el-icon>
+          Nation
+        </template>
+      </base-table>
       <pagination
         v-model:page="pages.page"
-        v-model:pageSize="pages.limit"
+        v-model:pageSize="pages.pageSize"
         :total="total"
         @pageChange="getTableData"
       />
@@ -39,8 +57,10 @@
 import { useTable } from '@/hooks/useTable';
 import { getRemoteAPI, getList } from '@/api/demo.js';
 import { splitDateRange } from '@/utils/ruoyi';
+import { Edit, Location } from '@element-plus/icons-vue';
 const message = inject('$modal');
 
+const EditIcon = shallowRef(Edit);
 const tableRef = ref(null);
 const formItems = reactive({
   input: {
@@ -182,24 +202,76 @@ const searchParams = reactive({
 });
 const columns = ref([
   {
-    prop: 'name',
-    label: 'name'
+    prop: 'pos',
+    label: 'Pos.',
+    slot: true
   },
   {
-    prop: 'status',
-    label: 'status'
+    prop: 'rider',
+    label: 'Rider',
+    slot: true
+  },
+  {
+    prop: 'nation',
+    label: 'Nation',
+    slotHeader: 'nationHeader'
+  },
+  {
+    prop: 'team',
+    width: '240px',
+    label: 'Team'
+  },
+  {
+    prop: 'bike',
+    label: 'Motorcycle'
+  },
+  {
+    prop: 'totaltime',
+    label: 'Total Time',
+    props: {
+      sortable: true
+    }
+  },
+  {
+    prop: 'kmh',
+    label: 'Km/h'
+  },
+  {
+    prop: 'date',
+    label: 'Date',
+    width: '160px',
+    format: 'formatDate'
+  },
+  {
+    label: '操作',
+    buttons: [
+      {
+        text: '编辑',
+        loading: 'loading',
+        props: {
+          icon: EditIcon
+        },
+        click: row => {
+          row.loading = true;
+          setTimeout(() => {
+            row.loading = false;
+          }, 2000);
+        }
+      }
+    ]
   }
 ]);
 
 const { loading, tableData, pages, total, getTableData } = useTable(
   getRemoteAPI,
   {
-    // tableRef,
+    tableRef,
     searchParams,
-    pages: {
-      page: 1,
-      limit: 20
-    },
+    // custom pages
+    // pages: {
+    //   page: 1,
+    //   limit: 20
+    // },
     onPreprocess: () => {
       console.log('onPreprocess');
       return Promise.resolve();
@@ -218,15 +290,17 @@ const handleChange = ({ key, val }) => {
   }
 };
 const handleUpdateData = type => {
+  console.log('searchParams :>> ', searchParams);
+  // set 'manualReset' can use manual reset
   if (type === 'reset') {
     // to do something
   }
-
-  console.log('searchParams :>> ', searchParams);
   getTableData();
 };
 const handleAdd = () => {
-  message.error('成功！');
+  const selected = tableRef.value.baseTableRef.getSelectionRows();
+  console.log('selected :>> ', selected);
+  message.success('成功！');
 };
 </script>
 
