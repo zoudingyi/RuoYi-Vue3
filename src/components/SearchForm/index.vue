@@ -167,6 +167,9 @@ onUnmounted(() => {
       .el-cascader {
         width: 100%;
       }
+      .el-form-item__label {
+        font-weight: 700;
+      }
       .el-checkbox-button__inner {
         font-weight: normal;
       }
