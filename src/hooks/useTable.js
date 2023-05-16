@@ -41,7 +41,12 @@ export const useTable = (api, options) => {
         state.tableData = (data || list || res.data) ?? [];
         state.total = total ?? res.total;
         onSuccess && onSuccess(res);
-        tableRef && tableRef.value.setScrollTop(0);
+        // Scroll back to the top
+        if (tableRef) {
+          tableRef.value.baseTableRef
+            ? tableRef.value.baseTableRef.setScrollTop(0)
+            : tableRef.value.setScrollTop(0);
+        }
       })
       .finally(() => {
         state.loading = false;
