@@ -22,7 +22,7 @@
       <base-table
         ref="tableRef"
         type="selection"
-        :data="tableData"
+        :data="fetchTableData"
         :loading="loading"
         :columns="columns"
         :otherProp="{
@@ -253,6 +253,7 @@ const columns = ref([
           icon: EditIcon
         },
         click: row => {
+          // 加载loading
           row.loading = true;
           setTimeout(() => {
             row.loading = false;
@@ -263,6 +264,7 @@ const columns = ref([
         text: '隐藏按钮',
         hide: 'isHide',
         click: row => {
+          // 条件渲染按钮
           row.isHide = true;
           setTimeout(() => {
             row.isHide = false;
@@ -272,6 +274,14 @@ const columns = ref([
     ]
   }
 ]);
+
+// 视情况是否需要对数据进行处理
+const fetchTableData = computed(() => {
+  return tableData.value.map(row => ({
+    ...row,
+    isHide: row.pos % 2
+  }));
+});
 
 const { loading, tableData, pages, total, getTableData } = useTable(
   getRemoteAPI,
@@ -310,8 +320,7 @@ const handleUpdateData = type => {
 };
 const handleAdd = () => {
   const selected = tableRef.value.baseTableRef.getSelectionRows();
-  console.log('selected :>> ', selected);
-  message.success('成功！');
+  message.success(`已选择${selected.length}个`);
 };
 </script>
 
