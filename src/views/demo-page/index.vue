@@ -35,7 +35,17 @@
         </template>
         <template #rider="{ scope }">
           {{ scope.row.number }}
-          <span style="font-weight: bold">{{ scope.row.rider }}</span>
+          <tooltip
+            :content="scope.row.riderDetails"
+            :otherProp="{ disabled: !scope.row.riderDetails }"
+          >
+            <span style="font-weight: bold">{{ scope.row.rider }}</span>
+            <!-- <template #content>
+              multiple lines
+              <br />
+              second line
+            </template> -->
+          </tooltip>
         </template>
         <!-- 自定义表头 -->
         <template #nationHeader>
@@ -204,12 +214,12 @@ const columns = ref([
   {
     prop: 'pos',
     label: 'Pos.',
-    slot: true
+    slot: 'pos'
   },
   {
     prop: 'rider',
     label: 'Rider',
-    slot: true
+    slot: 'rider'
   },
   {
     prop: 'nation',

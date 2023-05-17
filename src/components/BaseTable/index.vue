@@ -25,7 +25,7 @@
       </template>
       <template #default="scope">
         <template v-if="item.slot">
-          <slot :name="item.prop" :scope="scope"></slot>
+          <slot :name="item.slot" :scope="scope"></slot>
         </template>
         <template v-else-if="item.buttons">
           <el-button

@@ -11,6 +11,8 @@ export function getRemoteAPI(data) {
             pos: 1,
             points: '25',
             rider: 'Alex RINS',
+            riderDetails:
+              'Álex Rins Navarro is a Spanish Grand Prix motorcycle racer for the LCR Honda Castrol in the MotoGP class.',
             number: 42,
             nation: 'SPA',
             team: 'Team SUZUKI ECSTAR',
