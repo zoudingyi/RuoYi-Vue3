@@ -51,4 +51,4 @@ yarn build:stage
 yarn lint
 ```
 
-更多说明请看：[文档地址](http://doc.ruoyi.vip)
+更多说明请看：[文档地址](https://zoudingyi.github.io/manage-system-docs/)
