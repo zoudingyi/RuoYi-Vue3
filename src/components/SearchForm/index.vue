@@ -1,6 +1,6 @@
 <template>
   <!-- 适合element常规搜索组件：input select cascader date-time-piker radio checkbox -->
-  <el-form :model="searchParams" ref="search-form" :size="size">
+  <el-form :model="searchParams" ref="search-form" v-bind="otherProps">
     <div class="grid-container">
       <div class="grid-item" v-for="(value, key) in showFormItems" :key="key">
         <el-form-item :label="value.label">
@@ -64,9 +64,9 @@ import { throttle, deepClone } from '@/utils';
 
 const emit = defineEmits(['updateData', 'update:formData', 'change']);
 const props = defineProps({
-  size: {
-    type: String,
-    default: 'default'
+  otherProps: {
+    type: Object,
+    default: {}
   },
   formData: {
     type: Object,
