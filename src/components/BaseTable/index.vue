@@ -95,6 +95,9 @@ const deStructure = (row, { prop, format }) => {
     if (data === '') break;
   }
   if (format) {
+    if (typeof format === 'function') {
+      return format(data);
+    }
     return utils[format](data);
   }
   return data;
