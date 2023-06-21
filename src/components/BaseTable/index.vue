@@ -1,49 +1,36 @@
 <template>
   <!-- 基础table封装 适用常规场景 -->
-  <el-table
-    ref="baseTableRef"
-    v-loading="loading"
-    v-bind="otherProp"
-    :data="tableData"
-    :height="height"
-    :border="border"
-    @selection-change="handleSelectionChange"
-    @sort-change="hanldeSortChange"
-  >
-    <!-- selection / index / expand -->
-    <el-table-column v-if="type" :type="type" width="50" align="center" />
+  <el-table ref="baseTableRef" height="100%" border>
+    <slot name="beginColumn" />
     <el-table-column
-      v-for="item in columns"
-      :key="item.id"
-      v-bind="item.props"
-      :prop="item.prop"
-      :label="item.label"
-      :width="item.width"
+      v-for="(attrs, index) in columns"
+      v-bind="attrs"
+      :key="index"
     >
-      <template v-if="item.slotHeader" #header="scope">
-        <slot :name="item.slotHeader" :scope="scope"></slot>
+      <template v-if="attrs.slotHeader" #header="scope">
+        <slot :name="attrs.slotHeader" :scope="scope" />
       </template>
       <template #default="scope">
-        <template v-if="item.slot">
-          <slot :name="item.slot" :scope="scope"></slot>
+        <template v-if="attrs.slot">
+          <slot :name="attrs.slot" :scope="scope" />
         </template>
-        <template v-else-if="item.buttons">
+        <template v-else-if="attrs.buttons">
           <el-button
-            v-for="button in item.buttons"
-            v-show="!scope.row[button.hide]"
-            :key="button.text"
+            v-for="btn in attrs.buttons"
+            v-show="!scope.row[btn.hide]"
+            :key="btn.text"
+            :loading="scope.row[btn.loading]"
+            :disabled="scope.row[btn.disabled]"
             type="primary"
             link
-            :loading="scope.row[button.loading]"
-            :disabled="scope.row[button.disabled]"
-            v-bind="button.props"
-            @click="button.click(scope.row, scope)"
+            v-bind="btn.attrs"
+            @click="btn.click(scope.row, scope)"
           >
-            {{ button.text }}
+            {{ btn.text }}
           </el-button>
         </template>
         <template v-else>
-          {{ deStructure(scope.row, item) }}
+          {{ deStructure(scope.row, attrs) }}
         </template>
       </template>
     </el-table-column>
@@ -54,40 +41,16 @@
 import * as utils from '@/utils';
 
 const baseTableRef = ref(null);
-const emit = defineEmits(['selectionChange', 'sortChange']);
 const props = defineProps({
-  loading: {
-    type: Boolean,
-    default: true
-  },
   columns: {
     type: Array,
     default: []
-  },
-  tableData: {
-    type: Array,
-    default: []
-  },
-  otherProp: {
-    type: Object,
-    default: {}
-  },
-  height: {
-    type: [String, Number],
-    default: '100%'
-  },
-  border: {
-    type: Boolean,
-    default: true
-  },
-  type: {
-    type: String,
-    default: ''
   }
 });
 
 // 解构数据层级（支持xx.xx）、format数据
 const deStructure = (row, { prop, format }) => {
+  if (!prop) return '';
   const keys = prop.split('.');
   let data = row;
   for (let i = 0; i < keys.length; i++) {
@@ -102,10 +65,6 @@ const deStructure = (row, { prop, format }) => {
   }
   return data;
 };
-
-// 可自行添加 Table 事件
-const handleSelectionChange = val => emit('selectionChange', val);
-const hanldeSortChange = val => emit('sortChange', val);
 
 defineExpose({ baseTableRef });
 </script>

@@ -9,7 +9,7 @@
       />
     </primary-search>
     <primary-container>
-      <template #tableHeader>
+      <template #header>
         <el-button
           v-if="$auth.hasPermi('demo:user:edit')"
           type="primary"
@@ -21,31 +21,29 @@
       </template>
       <base-table
         ref="tableRef"
-        type="selection"
+        v-loading="loading"
         :data="fetchTableData"
-        :loading="loading"
         :columns="columns"
-        :otherProp="{
-          defaultSort: { prop: 'totaltime', order: 'ascending' }
-        }"
+        :defaultSort="{ prop: 'totaltime', order: 'ascending' }"
+        @selection-change="handleSelectionChange"
+        @sort-change="hanldeSortChange"
       >
+        <template #beginColumn>
+          <el-table-column type="selection" width="50" align="center" />
+        </template>
         <!-- 自定义slot -->
         <template #pos="{ scope }">
           {{ scope.row.pos }} ({{ scope.row.points }})
         </template>
         <template #rider="{ scope }">
           {{ scope.row.number }}
-          <tooltip
+          <el-tooltip
             :content="scope.row.riderDetails"
-            :otherProp="{ disabled: !scope.row.riderDetails }"
+            placement="top"
+            :disabled="!scope.row.riderDetails"
           >
             <span style="font-weight: bold">{{ scope.row.rider }}</span>
-            <!-- <template #content>
-              multiple lines
-              <br />
-              second line
-            </template> -->
-          </tooltip>
+          </el-tooltip>
         </template>
         <!-- 自定义表头 -->
         <template #nationHeader>
@@ -238,9 +236,7 @@ const columns = ref([
   {
     prop: 'totaltime',
     label: 'Total Time',
-    props: {
-      sortable: true
-    }
+    sortable: true
   },
   {
     prop: 'kmh',
@@ -259,7 +255,7 @@ const columns = ref([
       {
         text: '编辑',
         loading: 'loading',
-        props: {
+        attrs: {
           icon: EditIcon
         },
         click: row => {
@@ -331,6 +327,13 @@ const handleUpdateData = type => {
 const handleAdd = () => {
   const selected = tableRef.value.baseTableRef.getSelectionRows();
   message.success(`已选择${selected.length}个`);
+};
+
+const handleSelectionChange = val => {
+  console.log('val :>> ', val);
+};
+const hanldeSortChange = val => {
+  console.log('val :>> ', val);
 };
 </script>
 

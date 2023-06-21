@@ -4,7 +4,6 @@ import locale from 'element-plus/lib/locale/lang/zh-cn'; // 中文语言
 import 'element-plus/dist/index.css';
 
 // 全局组件
-import Tooltip from '@/components/Tooltip';
 import SearchForm from '@/components/SearchForm';
 import BaseTable from '@/components/BaseTable';
 import Pagination from '@/components/Pagination';
@@ -20,7 +19,6 @@ export default function installComponents(app) {
   });
 
   // 全局组件挂载
-  app.component('Tooltip', Tooltip);
   app.component('SearchForm', SearchForm);
   app.component('BaseTable', BaseTable);
   app.component('Pagination', Pagination);
